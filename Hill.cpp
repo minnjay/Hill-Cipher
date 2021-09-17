@@ -284,7 +284,7 @@ int Hill::calculateDeterminant(const Matrix A)
 		{
 			return A.get(0, 0)*A.get(1, 1) - A.get(0, 1)*A.get(1, 0);
 		}
-		else
+		else if(A.size(1) == 3)
 		{
 			int multi = 1;
 			int sum = 0;
@@ -316,6 +316,34 @@ int Hill::calculateDeterminant(const Matrix A)
 				counter++;
 			}
 			return sum;
+		}
+		else
+		{
+			Matrix process = A;
+			for (int col = 0; col < process.size(2)-1; ++col)
+			{
+				for (int row = col + 1; row < process.size(1); ++row)
+				{
+					this->row_diff_nomod(process, row, 0, process.size(2)-1, process, col, static_cast<double>(process.get(row, col))/ static_cast<double>(process.get(col,col)) );	
+				}
+			}
+
+			/*for (int i = 0; i < process.size(1); ++i)
+			{
+				for (int j = 0; j < process.size(2); ++j)
+				{
+					std::cout << process.get(i, j) << " ";
+				}
+				std::cout << std::endl;
+			}*/
+			// debug printing
+
+			int mult = 1;
+			for (int i = 0; i < A.size(1); ++i)
+			{
+				mult *= process.get(i, i);
+			}
+			return mult;
 		}
 
 	}
@@ -565,6 +593,17 @@ void Hill::row_diff(Matrix& A, unsigned int i, unsigned int j, unsigned int k, M
 		for (int a = j; a <= k; ++a)
 		{
 			A.set(i, a, mod( A.get(i, a) - c*(B.get(l,a)), 29));
+		}
+	}
+}
+
+void Hill::row_diff_nomod(Matrix& A, unsigned int i, unsigned int j, unsigned int k, Matrix& B, unsigned int l, double c)
+{
+	if (i < A.size(1) && j < A.size(2) && k < A.size(2) && l < B.size(1))
+	{
+		for (int a = j; a <= k; ++a)
+		{
+			A.set(i, a, static_cast<int>( static_cast<double>(A.get(i, a)) - c*  (static_cast<double>(B.get(l, a)))    ) );
 		}
 	}
 }

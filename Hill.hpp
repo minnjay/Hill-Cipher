@@ -95,6 +95,10 @@ public:
    * @return true if the encryption and decryption keys have been recovered.
    */ 
   bool kpa( const std::vector<std::string> & P, const std::vector<std::string> & C, unsigned int n);
+
+  int calculateDeterminant(const Matrix A);
+
+  Matrix inv_mod(Matrix A);
  
   
 
@@ -112,7 +116,7 @@ private:
   std::string n2let(const Matrix & A);
 
   //Calculate the matrix inversion of A, mod 29
-  Matrix inv_mod(Matrix A);
+  
   //an empty matrix is returned if A is not invertible
 
   //calculate c = a mod b, where c = [0,b)
@@ -128,7 +132,9 @@ private:
   //NOTE: matrix pass by reference means all operations occur in place
   void row_diff(Matrix & A, unsigned int i, unsigned int j, unsigned int k, Matrix & B, unsigned int l, unsigned int c);
 
-  int calculateDeterminant(const Matrix A);
+  void row_diff_nomod(Matrix & A, unsigned int i, unsigned int j, unsigned int k, Matrix & B, unsigned int l, double c);
+
+  
 
   Matrix Identity_creation(unsigned int n);
 
